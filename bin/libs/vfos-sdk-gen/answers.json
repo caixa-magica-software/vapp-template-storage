@@ -1,0 +1,13 @@
+{
+    "answers": {
+        "name": "vfos-sdk",
+        "enabler-framework": true,
+        "datastorage": true,
+        "datastorage_nosql": true,
+        "datastorage_timeseries": true,
+        "pubsub": true
+    },
+    "options": {
+        "onconflict": "force"
+    }
+}

@@ -1,0 +1,29 @@
+{
+   "packages" : [
+            {
+                "code" : "enabler-framework",
+                "description" : "Enablers Framework",
+                "adding" : false
+            },
+            {
+                "code" : "datastorage",
+                "description" : "Data Storage",
+                "adding" : false
+            },
+            {
+                "code" : "datastorage_nosql",
+                "description" : "Data Storage NoSQL",
+                "adding" : false
+            },
+            {
+                "code" : "datastorage_timeseries",
+                "description" : "Data Storage Time Series",
+                "adding" : false
+            },
+            {
+                "code" : "pubsub",
+                "description" : "Messaging",
+                "adding" : false
+            }
+   ]
+}
