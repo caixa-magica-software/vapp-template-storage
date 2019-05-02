@@ -1,0 +1,17 @@
+
+
+.dot_red {
+    height: 16px;
+    width: 16px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .dot_green {
+    height: 16px;
+    width: 16px;
+    background-color: #00cc00;
+    border-radius: 50%;
+    display: inline-block;
+  }

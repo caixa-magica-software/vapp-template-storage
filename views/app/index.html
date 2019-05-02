@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Template of vApp - Sensor data sample</title>
+
+	<meta name="description" content="Simple vApp to demostrate vfos Components">
+	<meta name="author" content="Vitor Viana">
+
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-8">
+				<h3>
+					Vapp Template
+				</h3>
+				<div class="card">
+					<h5 class="card-header">
+						Sensor 1 Data
+					</h5>
+					<div class="card-body">
+						<div class="row">
+
+							<div class="col-md-12">
+								<div class="form-inline">
+									<div class="form-group mb-2">
+										<label for="staticEmail2">Topic :</label>
+										<input type="text" class="form-control-plaintext" id="newTopic"
+											value="pt.vfos.channel.test" style="margin-left:10px">
+									</div>
+
+									<button class="btn btn-primary mb-2" id="btn-ChangeTopic"
+										style="margin-left:10px">change</button>
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+
+							<div class="col-md-12">
+								<textarea class="form-control" rows="7" id="sensordata"></textarea>
+							</div>
+
+						</div>
+					</div>
+					<div class="card-footer">
+						<div><span id='status_icon' class="dot_green"></span> <span id='status_text'></span></div>
+
+					</div>
+
+				</div>
+				<div class="btn-group" role="group">
+
+					<button class="btn btn-secondary" type="button" id="add-btn">
+						Get Data
+					</button>
+					<button class="btn btn-secondary" type="button" id="clear-btn">
+						Clear
+					</button>
+
+				</div>
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
+	</div>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="js/scripts.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+
+
+	<script script language='javascript'>
+		var counter = 0;
+		$(document).ready(function () {
+
+
+			var $textarea = $('#sensordata');
+			$textarea.scrollTop($textarea[0].scrollHeight);
+
+
+			// $('#add-btn').click(function () {
+			// 	addToTextarea($('#sensordata'), counter);
+			// 	counter++;
+			// });
+
+			/**
+			 * clear the text area
+			 */
+			$('#clear-btn').click(function () {
+				$('#sensordata').val('');
+				counter = 0;
+			});
+
+			/**
+			 * get new data
+			 */
+			$('#add-btn').click(function () {
+				getAllMessages();
+			});
+
+			/**
+			 * change topic
+			 */
+			$('#btn-ChangeTopic').click(function () {
+				var nTopic = $("#newTopic").val()
+				console.log('new Topic is ', nTopic)
+				if(nTopic && nTopic.length > 0){
+					changeTopic(nTopic);
+				}
+				else{
+					console.log('should supply a new topic valid' );
+				}
+				
+			});
+
+			checkAlive();
+
+
+		});
+
+		function addToTextarea($ta, text) {
+			var val = $ta.val();
+			if (val) {
+				$ta.val(val + '\n' + text);
+			} else {
+				$ta.val(text);
+			}
+			$ta.scrollTop($ta[0].scrollHeight);
+		}
+
+
+		// setInterval(() => {
+		// 	console.log('Data from sensor')
+		// 	var text = $('#sensordata').val();
+		// 	addToTextarea($('#sensordata'), 'cenas')
+		// 	counter++;
+		// }, 1000 * 3)
+
+		console.log('DOMAIN ', window.location.hostname)
+		console.log('LOCATION ', window.location.href)
+		let clean = window.location.href.replace('index.html', '');
+		var final = clean + app.aliveRoute
+		console.log('CALL API ', final)
+
+		function checkAlive() {
+			let ico = $('#status_icon');
+			ico.removeClass('class');
+			ico.attr('class', '')
+			axios({
+					method: 'GET',
+					url: final,
+				})
+				.then(function (response) {
+					console.log('AFTER RESP ', response)
+					if (response.status == 200) {
+						ico.addClass('dot_green');
+						$('#status_text').text(response.data.message)
+					} else {
+						ico.addClass('dot_red');
+						$('#status_text').text('not connected')
+					}
+
+				})
+				.catch(function (error) {
+					ico.addClass('dot_red');
+					$('#status_text').text('not connected')
+					console.log(error);
+				});
+		}
+
+		function getAllMessages() {
+			var messageURl = clean + app.getMessages
+			console.log('get Messages from ', messageURl)
+			axios({
+					method: 'GET',
+					url: messageURl,
+				})
+				.then(function (response) {
+					// console.log('AFTER RESP ', response)
+					if (response.status == 200) {
+						console.log('response ', response.data.messages)
+						if (response.data.messages && response.data.messages.length > 0) {
+							console.log('should control ', )
+							// let finalStg = ''
+							// for(var i in response.data.messages)
+							// {
+							// 	finalStg += JSON.stringify(response.data.messages[i]) + '/n';
+							// }
+
+							addToTextarea($('#sensordata'), JSON.stringify(response.data.messages))
+						}
+					} else {
+						// ico.addClass('dot_red');
+						// $('#status_text').text('not connected')
+					}
+
+				})
+				.catch(function (error) {
+
+					console.log('error getting messages ', error);
+				});
+
+		}
+
+		/*
+			change topic
+		*/
+		function changeTopic(newTopic) {
+			var changeTopicUrl = clean + app.changeTopic
+			console.log('get Messages from ', changeTopicUrl)
+			axios({
+					method: 'post',
+					url: changeTopicUrl,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					data: {
+						topic: newTopic
+					}
+				})
+				.then(function (response) {
+					// console.log('AFTER RESP ', response)
+					if (response.status == 200) {
+						console.log('response ', response)
+
+					} else {
+						// ico.addClass('dot_red');
+						// $('#status_text').text('not connected')
+					}
+
+				})
+				.catch(function (error) {
+
+					console.log('error getting messages ', error);
+				});
+
+		}
+	</script>
+
+
+
+</body>
+
+</html>
