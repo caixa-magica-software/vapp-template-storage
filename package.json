@@ -1,0 +1,35 @@
+{
+    "name": "sensor",
+    "version": "1.0.0",
+    "description": "vfos",
+    "main": "app.js",
+    "dependencies": {
+        "app-module-path": "^2.2.0",
+        "app-root-path": "^2.2.1",
+        "async": "^2.6.0",
+        "body-parser": "~1.18.2",
+        "concurrently": "^4.1.0",
+        "cookie-parser": "~1.4.3",
+        "ejs": "^2.6.1",
+        "express": "^4.16.3",
+        "express-validator": "^5.0.2",
+        "morgan": "~1.9.0",
+        "pug": "^2.0.3",
+        "recursive-readdir": "^2.2.2",
+        "recursive-readdir-sync": "^1.0.6",
+        "request": "^2.83.0",
+        "string-contains": "^0.1.0",
+        "superagent": "^5.0.5",
+        "underscore": "^1.9.1",
+        "yeoman-gen-run": "^1.2.3"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "boot": "npm install && npm install --prefix views",
+        "start-be": "PORT=4201 node ./bin/be/index.js",
+        "build_fe": "npm run env -s && ng build --aot --deploy-url \"/$ASSET_NAME/app/\" --base-href \"/$ASSET_NAME/app/\" ",
+        "start": "ASSET_NAME=$ASSET_NAME concurrently --kill-others \"npm run start-be\" --deploy-url \"/$ASSET_NAME/app/\" --base-href \"/$ASSET_NAME/app/\""
+    },
+    "author": "vfos",
+    "license": "ISC"
+}

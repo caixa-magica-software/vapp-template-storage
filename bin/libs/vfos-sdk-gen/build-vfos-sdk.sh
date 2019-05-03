@@ -31,13 +31,19 @@ sudo mkdir -p /home/user/.config/insight-nodejs
 sudo touch /home/user/.config/insight-nodejs/insight-yo.json
 sudo chmod 777 -R /home/user/.config/
 cd vfos-oak-sdk-lib-code
+echo "performe npm link" 
+echo "$PWD"
 sudo npm link
-cd ..
+
+cd .. 
+echo "Run generator in silent mode" 
+echo "$PWD"
+
 # run code of auto generate SDK with yeoman gen using local install of yo-gen
-node ./node_modules/yeoman-gen-run/cli.js --name vfos-sdk --config ./vfos-sdk-gen/answers.json --out ./vfos-sdk
+sudo node ./node_modules/yeoman-gen-run/cli.js --name vfos-sdk --config ./vfos-sdk-gen/answers.json --out ./vfos-sdk
 
 # clean source of SDK used to generated finall installtion
 sudo rm -rf vfos-oak-sdk-lib-code/
-# clean node_modules used when SDK will be generated
+# # clean node_modules used when SDK will be generated
 sudo rm -rf node_modules/
 
